@@ -1,0 +1,138 @@
+%
+%   Kamooalewa.script
+%
+%   Propagate state of Kamooalewa from 1/01/2000 00:00:00 
+%   to 1/01/2049
+
+%----------------------------------------
+%---------- Celestial Body
+%----------------------------------------
+
+Create Spacecraft Kamo;
+GMAT Kamo.DateFormat = UTCGregorian; 
+GMAT Kamo.Epoch = '01 Jan 2000 00:00:00.000';
+GMAT Kamo.NAIFId = 20469219;
+GMAT Kamo.OrbitSpiceKernelName = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/Code/Kernels/20469219.bsp';
+% Plug in path to asteroid SPK kernel
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator KamoProp;
+GMAT KamoProp.Type = SPK;
+GMAT KamoProp.StepSize = 86400;
+GMAT KamoProp.CentralBody = Sun;
+GMAT KamoProp.EpochFormat = 'A1ModJulian';
+GMAT KamoProp.StartEpoch = 'FromSpacecraft';
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create Barycenter SunEarthBary
+SunEarthBary.BodyNames    = {Sun,Earth}; 
+
+Create CoordinateSystem SunEarthSynodic;
+GMAT SunEarthSynodic.Origin    = SunEarthBary; 
+GMAT SunEarthSynodic.Axes      = ObjectReferenced;
+GMAT SunEarthSynodic.XAxis     = R;
+GMAT SunEarthSynodic.ZAxis     = N;
+GMAT SunEarthSynodic.Primary   = Sun;
+GMAT SunEarthSynodic.Secondary = Earth;
+
+Create CoordinateSystem SunMJ2000Ec;
+GMAT SunMJ2000Ec.Origin = Sun;
+GMAT SunMJ2000Ec.Axes   = MJ2000Ec;
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create XYPlot KamoPosTrajPlot;
+GMAT KamoPosTrajPlot.SolverIterations = None;
+GMAT KamoPosTrajPlot.UpperLeft        = [0.208 0.089];
+GMAT KamoPosTrajPlot.Size             = [ 0.4 0.4];
+GMAT KamoPosTrajPlot.RelativeZOrder   = 705;
+GMAT KamoPosTrajPlot.Maximized        = false;
+GMAT KamoPosTrajPlot.XVariable        = Kamo.SunEarthSynodic.X;
+GMAT KamoPosTrajPlot.YVariables       = {Kamo.SunEarthSynodic.Y}
+GMAT KamoPosTrajPlot.ShowPlot         = true;
+
+Create XYPlot PosTrajPlot;
+GMAT PosTrajPlot.SolverIterations = None;
+GMAT PosTrajPlot.UpperLeft        = [0.208 0.489];
+GMAT PosTrajPlot.Size             = [ 0.4 0.4];
+GMAT PosTrajPlot.RelativeZOrder   = 705;
+GMAT PosTrajPlot.Maximized        = false;
+GMAT PosTrajPlot.XVariable        = Earth.SunEarthSynodic.X;
+GMAT PosTrajPlot.YVariables       = {Earth.SunEarthSynodic.Y};
+GMAT PosTrajPlot.ShowPlot         = true;
+
+Create OrbitView SunInertialView;
+GMAT SunInertialView.SolverIterations       = Current;
+GMAT SunInertialView.UpperLeft              = [0.608 0.089];
+GMAT SunInertialView.Size                   = [ 0.4 0.4];
+GMAT SunInertialView.RelativeZOrder         = 716;
+GMAT SunInertialView.Maximized              = false;
+GMAT SunInertialView.Add                    = {Kamo, Earth, Sun};
+GMAT SunInertialView.CoordinateSystem       = SunMJ2000Ec;
+GMAT SunInertialView.DrawObject             = [ true true true ];
+GMAT SunInertialView.DataCollectFrequency   = 1;
+GMAT SunInertialView.UpdatePlotFrequency    = 50;
+GMAT SunInertialView.NumPointsToRedraw      = 0;
+GMAT SunInertialView.ShowPlot               = true;
+GMAT SunInertialView.ShowLabels             = true;
+GMAT SunInertialView.ViewPointReference     = Sun;
+GMAT SunInertialView.ViewPointVector        = [10000000 10000000 10000000];
+GMAT SunInertialView.ViewDirection          = Sun;
+GMAT SunInertialView.ViewScaleFactor        = 30;
+GMAT SunInertialView.ViewUpCoordinateSystem = SunMJ2000Ec;
+GMAT SunInertialView.ViewUpAxis             = Z;
+GMAT SunInertialView.EclipticPlane          = Off;
+GMAT SunInertialView.XYPlane                = On;
+GMAT SunInertialView.WireFrame              = Off;
+GMAT SunInertialView.Axes                   = On;
+GMAT SunInertialView.Grid                   = Off;
+GMAT SunInertialView.SunLine                = Off;
+GMAT SunInertialView.UseInitialView         = On;
+GMAT SunInertialView.StarCount              = 7000;
+GMAT SunInertialView.EnableStars            = On;
+GMAT SunInertialView.EnableConstellations   = On;
+
+Create OrbitView SunEarthSynodicView;
+GMAT SunEarthSynodicView.SolverIterations       = Current;
+GMAT SunEarthSynodicView.UpperLeft              = [0.608 0.489];
+GMAT SunEarthSynodicView.Size                   = [ 0.4 0.4];
+GMAT SunEarthSynodicView.RelativeZOrder         = 710;
+GMAT SunEarthSynodicView.Maximized              = false;
+GMAT SunEarthSynodicView.Add                    = {Kamo, Earth, Sun};
+GMAT SunEarthSynodicView.CoordinateSystem       = SunEarthSynodic; 
+GMAT SunEarthSynodicView.DrawObject             = [ true true true ];
+GMAT SunEarthSynodicView.DataCollectFrequency   = 1;
+GMAT SunEarthSynodicView.UpdatePlotFrequency    = 50;
+GMAT SunEarthSynodicView.NumPointsToRedraw      = 0;
+GMAT SunEarthSynodicView.ShowPlot               = true;
+GMAT SunEarthSynodicView.ShowLabels             = true;
+GMAT SunEarthSynodicView.ViewPointReference     = Earth; 
+GMAT SunEarthSynodicView.ViewPointVector        = [20000000 -70000000 50000000];
+GMAT SunEarthSynodicView.ViewDirection          = Earth; 
+GMAT SunEarthSynodicView.ViewScaleFactor        = 1;
+GMAT SunEarthSynodicView.ViewUpCoordinateSystem = SunEarthSynodic; 
+GMAT SunEarthSynodicView.ViewUpAxis             = Z;
+GMAT SunEarthSynodicView.EclipticPlane          = Off;
+GMAT SunEarthSynodicView.XYPlane                = On;
+GMAT SunEarthSynodicView.WireFrame              = Off;
+GMAT SunEarthSynodicView.Axes                   = On;
+GMAT SunEarthSynodicView.Grid                   = Off;
+GMAT SunEarthSynodicView.SunLine                = Off;
+GMAT SunEarthSynodicView.UseInitialView         = On;
+GMAT SunEarthSynodicView.StarCount              = 7000;
+GMAT SunEarthSynodicView.EnableStars            = On;
+GMAT SunEarthSynodicView.EnableConstellations   = On;
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+BeginMissionSequence;
+
+Propagate KamoProp(Kamo) {Kamo.ElapsedDays = 17898};
