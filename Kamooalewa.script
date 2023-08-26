@@ -12,7 +12,7 @@ Create Spacecraft Kamo;
 GMAT Kamo.DateFormat = UTCGregorian; 
 GMAT Kamo.Epoch = '01 Jan 2000 00:00:00.000';
 GMAT Kamo.NAIFId = 20469219;
-GMAT Kamo.OrbitSpiceKernelName = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/Code/Kernels/20469219.bsp';
+GMAT Kamo.OrbitSpiceKernelName = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/Kernels/20469219.bsp';
 % Plug in path to asteroid SPK kernel
 %----------------------------------------
 %---------- Propagators
