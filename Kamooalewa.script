@@ -4,36 +4,60 @@
 %   Propagate state of Kamooalewa from 1/01/2000 00:00:00 
 %   to 1/01/2049
 
+
+%----------------------------------------
+%---------- Solar System User-Modified Values
+%----------------------------------------
+
+GMAT SolarSystem.EphemerisSource = 'SPICE';
+GMAT SolarSystem.SPKFilename     = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Utilities/Kernels/planets/de441.bsp';
+GMAT Mars.NAIFId    = 4;
+GMAT Jupiter.NAIFId = 5;
+GMAT Saturn.NAIFId  = 6;
+GMAT Uranus.NAIFId  = 7;
+GMAT Neptune.NAIFId = 8;
+GMAT Pluto.NAIFId   = 9;
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create Barycenter SunEarthBary;
+GMAT SunEarthBary.OrbitColor  = Gold;
+GMAT SunEarthBary.TargetColor = DarkGray;
+GMAT SunEarthBary.BodyNames   = {Sun, Earth};
 %----------------------------------------
 %---------- Celestial Body
 %----------------------------------------
 
 Create Spacecraft Kamo;
-GMAT Kamo.DateFormat = UTCGregorian; 
-GMAT Kamo.Epoch = '01 Jan 2000 00:00:00.000';
-GMAT Kamo.NAIFId = 20469219;
-GMAT Kamo.OrbitSpiceKernelName = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/Kernels/20469219.bsp';
+GMAT Kamo.DateFormat           = TDBGregorian;
+GMAT Kamo.Epoch                = '02 Jan 2000 00:00:00.000';
+GMAT Kamo.CoordinateSystem     = EarthMJ2000Eq;
+GMAT Kamo.DisplayStateType     = Cartesian;
+GMAT Kamo.NAIFId               = 20469219;
+GMAT Kamo.OrbitSpiceKernelName = {'/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/Kernels/20469219.bsp'};
+GMAT Kamo.OrbitColor           = Red;
+GMAT Kamo.TargetColor          = Teal;
+
 % Plug in path to asteroid SPK kernel
 %----------------------------------------
 %---------- Propagators
 %----------------------------------------
 
 Create Propagator KamoProp;
-GMAT KamoProp.Type = SPK;
-GMAT KamoProp.StepSize = 86400;
-GMAT KamoProp.CentralBody = Sun;
+GMAT KamoProp.Type        = SPK;
+GMAT KamoProp.StepSize    = 86400;
+GMAT KamoProp.CentralBody = Earth;
 GMAT KamoProp.EpochFormat = 'A1ModJulian';
-GMAT KamoProp.StartEpoch = 'FromSpacecraft';
+GMAT KamoProp.StartEpoch  = 'FromSpacecraft';
 
 %----------------------------------------
 %---------- Coordinate Systems
 %----------------------------------------
 
-Create Barycenter SunEarthBary
-SunEarthBary.BodyNames    = {Sun,Earth}; 
-
 Create CoordinateSystem SunEarthSynodic;
-GMAT SunEarthSynodic.Origin    = SunEarthBary; 
+GMAT SunEarthSynodic.Origin    = SunEarthBary;
 GMAT SunEarthSynodic.Axes      = ObjectReferenced;
 GMAT SunEarthSynodic.XAxis     = R;
 GMAT SunEarthSynodic.ZAxis     = N;
@@ -50,29 +74,31 @@ GMAT SunMJ2000Ec.Axes   = MJ2000Ec;
 
 Create XYPlot KamoPosTrajPlot;
 GMAT KamoPosTrajPlot.SolverIterations = None;
-GMAT KamoPosTrajPlot.UpperLeft        = [0.208 0.089];
-GMAT KamoPosTrajPlot.Size             = [ 0.4 0.4];
-GMAT KamoPosTrajPlot.RelativeZOrder   = 705;
+GMAT KamoPosTrajPlot.UpperLeft        = [ 0.2076719576719577 0.08859470468431772 ];
+GMAT KamoPosTrajPlot.Size             = [ 0.3988095238095238 0.3981670061099796 ];
+GMAT KamoPosTrajPlot.RelativeZOrder   = 1069;
 GMAT KamoPosTrajPlot.Maximized        = false;
 GMAT KamoPosTrajPlot.XVariable        = Kamo.SunEarthSynodic.X;
-GMAT KamoPosTrajPlot.YVariables       = {Kamo.SunEarthSynodic.Y}
+GMAT KamoPosTrajPlot.YVariables       = {Kamo.SunEarthSynodic.Y};
+GMAT KamoPosTrajPlot.ShowGrid         = true;
 GMAT KamoPosTrajPlot.ShowPlot         = true;
 
 Create XYPlot PosTrajPlot;
 GMAT PosTrajPlot.SolverIterations = None;
-GMAT PosTrajPlot.UpperLeft        = [0.208 0.489];
-GMAT PosTrajPlot.Size             = [ 0.4 0.4];
-GMAT PosTrajPlot.RelativeZOrder   = 705;
+GMAT PosTrajPlot.UpperLeft        = [ 0.2076719576719577 0.4887983706720977 ];
+GMAT PosTrajPlot.Size             = [ 0.3988095238095238 0.3981670061099796 ];
+GMAT PosTrajPlot.RelativeZOrder   = 1074;
 GMAT PosTrajPlot.Maximized        = false;
 GMAT PosTrajPlot.XVariable        = Earth.SunEarthSynodic.X;
 GMAT PosTrajPlot.YVariables       = {Earth.SunEarthSynodic.Y};
+GMAT PosTrajPlot.ShowGrid         = true;
 GMAT PosTrajPlot.ShowPlot         = true;
 
 Create OrbitView SunInertialView;
 GMAT SunInertialView.SolverIterations       = Current;
-GMAT SunInertialView.UpperLeft              = [0.608 0.089];
-GMAT SunInertialView.Size                   = [ 0.4 0.4];
-GMAT SunInertialView.RelativeZOrder         = 716;
+GMAT SunInertialView.UpperLeft              = [ 0.6078042328042328 0.08859470468431772 ];
+GMAT SunInertialView.Size                   = [ 0.3988095238095238 0.3981670061099796 ];
+GMAT SunInertialView.RelativeZOrder         = 1087;
 GMAT SunInertialView.Maximized              = false;
 GMAT SunInertialView.Add                    = {Kamo, Earth, Sun};
 GMAT SunInertialView.CoordinateSystem       = SunMJ2000Ec;
@@ -81,9 +107,10 @@ GMAT SunInertialView.DataCollectFrequency   = 1;
 GMAT SunInertialView.UpdatePlotFrequency    = 50;
 GMAT SunInertialView.NumPointsToRedraw      = 0;
 GMAT SunInertialView.ShowPlot               = true;
+GMAT SunInertialView.MaxPlotPoints          = 2000000;
 GMAT SunInertialView.ShowLabels             = true;
 GMAT SunInertialView.ViewPointReference     = Sun;
-GMAT SunInertialView.ViewPointVector        = [10000000 10000000 10000000];
+GMAT SunInertialView.ViewPointVector        = [ 10000000 10000000 10000000 ];
 GMAT SunInertialView.ViewDirection          = Sun;
 GMAT SunInertialView.ViewScaleFactor        = 30;
 GMAT SunInertialView.ViewUpCoordinateSystem = SunMJ2000Ec;
@@ -101,23 +128,24 @@ GMAT SunInertialView.EnableConstellations   = On;
 
 Create OrbitView SunEarthSynodicView;
 GMAT SunEarthSynodicView.SolverIterations       = Current;
-GMAT SunEarthSynodicView.UpperLeft              = [0.608 0.489];
-GMAT SunEarthSynodicView.Size                   = [ 0.4 0.4];
-GMAT SunEarthSynodicView.RelativeZOrder         = 710;
+GMAT SunEarthSynodicView.UpperLeft              = [ 0.6078042328042328 0.4887983706720977 ];
+GMAT SunEarthSynodicView.Size                   = [ 0.3988095238095238 0.3981670061099796 ];
+GMAT SunEarthSynodicView.RelativeZOrder         = 1079;
 GMAT SunEarthSynodicView.Maximized              = false;
 GMAT SunEarthSynodicView.Add                    = {Kamo, Earth, Sun};
-GMAT SunEarthSynodicView.CoordinateSystem       = SunEarthSynodic; 
+GMAT SunEarthSynodicView.CoordinateSystem       = SunEarthSynodic;
 GMAT SunEarthSynodicView.DrawObject             = [ true true true ];
 GMAT SunEarthSynodicView.DataCollectFrequency   = 1;
 GMAT SunEarthSynodicView.UpdatePlotFrequency    = 50;
 GMAT SunEarthSynodicView.NumPointsToRedraw      = 0;
 GMAT SunEarthSynodicView.ShowPlot               = true;
+GMAT SunEarthSynodicView.MaxPlotPoints          = 2000000;
 GMAT SunEarthSynodicView.ShowLabels             = true;
-GMAT SunEarthSynodicView.ViewPointReference     = Earth; 
-GMAT SunEarthSynodicView.ViewPointVector        = [20000000 -70000000 50000000];
-GMAT SunEarthSynodicView.ViewDirection          = Earth; 
+GMAT SunEarthSynodicView.ViewPointReference     = Earth;
+GMAT SunEarthSynodicView.ViewPointVector        = [ 20000000 -70000000 50000000 ];
+GMAT SunEarthSynodicView.ViewDirection          = Earth;
 GMAT SunEarthSynodicView.ViewScaleFactor        = 1;
-GMAT SunEarthSynodicView.ViewUpCoordinateSystem = SunEarthSynodic; 
+GMAT SunEarthSynodicView.ViewUpCoordinateSystem = SunEarthSynodic;
 GMAT SunEarthSynodicView.ViewUpAxis             = Z;
 GMAT SunEarthSynodicView.EclipticPlane          = Off;
 GMAT SunEarthSynodicView.XYPlane                = On;
@@ -130,9 +158,29 @@ GMAT SunEarthSynodicView.StarCount              = 7000;
 GMAT SunEarthSynodicView.EnableStars            = On;
 GMAT SunEarthSynodicView.EnableConstellations   = On;
 
+Create ReportFile Ephem_Costum;
+GMAT Ephem_Costum.SolverIterations = None;
+GMAT Ephem_Costum.UpperLeft        = [ 0 0 ];
+GMAT Ephem_Costum.Size             = [ 0 0 ];
+GMAT Ephem_Costum.RelativeZOrder   = 0;
+GMAT Ephem_Costum.Maximized        = false;
+%GMAT Ephem_Costum.Filename         = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/GMAT Prop/Kamooalewa_ephem_backward.txt';
+GMAT Ephem_Costum.Filename         = '/Users/bhanson/Library/CloudStorage/OneDrive-UCSanDiego/UCSD/Research/Rosengren/SFFP/Kamooalewa/GMAT Prop/Kamooalewa_ephem_forward.txt';
+GMAT Ephem_Costum.Precision        = 16;
+GMAT Ephem_Costum.Add              = {Kamo.Epoch.TDBGregorian, Kamo.EarthMJ2000Ec.X, Kamo.EarthMJ2000Ec.Y, Kamo.EarthMJ2000Ec.Z, Kamo.EarthMJ2000Ec.VX, Kamo.EarthMJ2000Ec.VY, Kamo.EarthMJ2000Ec.VZ};
+GMAT Ephem_Costum.WriteHeaders     = true;
+GMAT Ephem_Costum.LeftJustify      = On;
+GMAT Ephem_Costum.ZeroFill         = Off;
+GMAT Ephem_Costum.FixedWidth       = true;
+GMAT Ephem_Costum.Delimiter        = ' ';
+GMAT Ephem_Costum.ColumnWidth      = 23;
+GMAT Ephem_Costum.WriteReport      = true;
+
 %----------------------------------------
 %---------- Mission Sequence
 %----------------------------------------
 BeginMissionSequence;
 
-Propagate KamoProp(Kamo) {Kamo.ElapsedDays = 17898};
+
+%Propagate BackProp KamoProp(Kamo) {Kamo.ElapsedDays = 146086}; % Back propagates to 01/02/1600
+Propagate          KamoProp(Kamo) {Kamo.ElapsedDays = 73048 }; % Propagtes to 12/31/2199
